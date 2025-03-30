@@ -1,0 +1,42 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode files
+xcuserdata/
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcworkspace/
+
+# Derived data
+DerivedData/
+
+# Build artifacts
+/build/
+*.o
+*.a
+*.dylib
+*.so
+*.exe
+
+# CocoaPods (if you're using CocoaPods)
+Pods/
+
+# Carthage (if you're using Carthage)
+Carthage/
+
+# Swift Package Manager
+/.build/
+/Packages/
+
+# SwiftPM Xcode project
+*.xcodeproj/project.xcworkspace/
+
+# Xcode Archive
+*.xcarchive
+
+# Temporary files
+*.swp
+*.swo
