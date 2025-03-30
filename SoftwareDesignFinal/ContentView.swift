@@ -2,12 +2,13 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @State private var meals: [Meal] = []
+    @State private var meals: [LoggableItem] = []
     @State private var workouts: [LoggableItem] = []
     
     @State private var showWorkoutForm = false
     @State private var showMealForm = false
-    
+    @State private var showStatsView = false
+        
     var body: some View {
         HStack {
             SidePanelView()
@@ -27,27 +28,31 @@ struct ContentView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 20, height: 20)
-                                
+                            
                         }
                         .buttonStyle(PlainButtonStyle())
                         .padding()
-
+                        
                     }
                     Spacer()
                     // Meals List
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(meals, id: \.name) { meal in
-                                VStack {
+                                Button {
+                                    TrackerSingleton.shared.selectedStatsItem = meal
+                                    showStatsView = true
+                                    
+                                } label: {
                                     Text(meal.name)
                                         .font(.title)
                                         .padding()
                                         .frame(width: 125, height: 125)
-                                        .background(Color.blue)
+                                        .background(Color.green)
                                         .cornerRadius(10)
                                         .foregroundColor(.white)
-                                        .fixedSize()
                                 }
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .padding(.horizontal)
@@ -57,7 +62,6 @@ struct ContentView: View {
                 .sheet(isPresented: $showMealForm, onDismiss: { updateLoggedItems() }) {
                     MealForm(meals: $meals)
                 }
-
                 
                 
                 Divider()
@@ -85,7 +89,11 @@ struct ContentView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(workouts, id: \.name) { workout in
-                                VStack {
+                                Button {
+                                    TrackerSingleton.shared.selectedStatsItem = workout 
+                                    showStatsView = true
+                                
+                                } label: {
                                     Text(workout.name)
                                         .font(.title)
                                         .padding()
@@ -93,8 +101,10 @@ struct ContentView: View {
                                         .background(Color.green)
                                         .cornerRadius(10)
                                         .foregroundColor(.white)
-                                    
                                 }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                
                             }
                         }
                         .padding(.horizontal)
@@ -105,6 +115,13 @@ struct ContentView: View {
                 .sheet(isPresented: $showWorkoutForm, onDismiss: { updateLoggedItems() }) {
                     WorkoutForm(workouts: $workouts)
                 }
+                .sheet(isPresented: $showStatsView) {
+                    if let selectedItem = TrackerSingleton.shared.selectedStatsItem {
+                        LoggableItemView(item: selectedItem)
+                    } else {
+                        Text("No item selected")
+                    }
+                }
                 
                 
             }
@@ -113,10 +130,8 @@ struct ContentView: View {
                 updateLoggedItems() // Load existing data on app start
             }
         }
-        
     }
         
-    
     // Function to update UI from Singleton
     private func updateLoggedItems() {
         let allItems = TrackerSingleton.shared.getLoggedItems()

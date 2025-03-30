@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MealForm: View {
-    @Binding var meals: [Meal] // Reference to meal list
+    @Binding var meals: [LoggableItem] // Reference to meal list
     @Environment(\.presentationMode) var presentationMode // Dismiss sheet
 
     @State private var type = "Meal"
@@ -100,7 +100,6 @@ struct WorkoutForm: View {
 
     func addWorkout() {
         if workoutType == "Strength", let setsInt = Int(sets), let repsInt = Int(reps) {
-            
             
             let newWorkout = LoggableItemFactory.createItem(type: workoutType, name: name, sets: setsInt, reps: repsInt)
             TrackerSingleton.shared.addItem(newWorkout)
