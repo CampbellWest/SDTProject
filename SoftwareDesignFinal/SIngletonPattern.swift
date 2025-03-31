@@ -7,7 +7,7 @@ class TrackerSingleton {
     var selectedStatsItem: LoggableItem?
 
     func addItem(_ item: LoggableItem) {
-        loggedItems.append(item)
+        loggedItems.insert(item, at: 0)
     }
 
     func getLoggedItems() -> [LoggableItem] {
