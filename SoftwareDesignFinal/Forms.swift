@@ -23,6 +23,7 @@ struct MealForm: View {
                 TextField("fats", text: $fats)
                 
             }
+            .padding()
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -40,11 +41,9 @@ struct MealForm: View {
     }
 
     func addMeal() {
-        let calsInt = Int(calories), proteinDouble = Double(protein), carbsDouble = Double(carbs), fatsDouble = Double(fats)
-    
-        let newMeal = LoggableItemFactory.createItem(type: type, name: name, calories: calsInt ?? 0, protein: proteinDouble ?? 0.0, carbs: carbsDouble ?? 0.0, fats: fatsDouble ?? 0.0)
-        
+        let newMeal = LoggableItemFactory.createItem(type: type, name: name, calories: calories, protein: protein, carbs: carbs, fats: fats)
         TrackerSingleton.shared.addItem(newMeal)
+        LoggableItemStorage.shared.appendToCSV(newMeal)
     }
 }
 
@@ -82,11 +81,12 @@ struct WorkoutForm: View {
                         
                 }
             }
+            .padding()
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         addWorkout()
-                        presentationMode.wrappedValue.dismiss() // Close form
+                        presentationMode.wrappedValue.dismiss()
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -99,19 +99,20 @@ struct WorkoutForm: View {
     }
 
     func addWorkout() {
-        if workoutType == "Strength", let setsInt = Int(sets), let repsInt = Int(reps) {
+        if workoutType == "Strength" {
             
-            let newWorkout = LoggableItemFactory.createItem(type: workoutType, name: name, sets: setsInt, reps: repsInt)
+            let newWorkout = LoggableItemFactory.createItem(type: workoutType, name: name, sets: sets, reps: reps)
             TrackerSingleton.shared.addItem(newWorkout)
+            LoggableItemStorage.shared.appendToCSV(newWorkout)
             
-        } else if workoutType == "Cardio", let durationInt = Int(duration) {
+        } else if workoutType == "Cardio" {
             
-            let newWorkout = LoggableItemFactory.createItem(type: workoutType, name: name, duration: durationInt)
+            let newWorkout = LoggableItemFactory.createItem(type: workoutType, name: name, duration: duration)
             TrackerSingleton.shared.addItem(newWorkout)
+            LoggableItemStorage.shared.appendToCSV(newWorkout)
         }
     }
 }
-
 
 #Preview {
     @State var sampleWorkouts: [LoggableItem] = []

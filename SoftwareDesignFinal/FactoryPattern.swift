@@ -5,38 +5,41 @@ protocol LoggableItem {
     var name: String { get }
 }
 
-// Workout Classes
+// Workout Class
 class StrengthWorkout: LoggableItem {
     let name: String
-    let sets: Int
-    let reps: Int
+    let sets: String
+    let reps: String
     
-    init(name: String, sets: Int, reps: Int) {
+    init(name: String, sets: String, reps: String) {
         self.name = name
         self.sets = sets
         self.reps = reps
     }
 }
 
+// Cardio Class
 class CardioWorkout: LoggableItem {
     let name: String
-    let duration: Int // in minutes
+    let duration: String // in minutes
     
-    init(name: String, duration: Int) {
+    init(name: String, duration: String) {
         self.name = name
         self.duration = duration
     }
 }
 
-// Meal Classes
+// Meal Class
 class Meal: LoggableItem {
     let name: String
-    let calories: Int
-    let protein: Double
-    let carbs: Double
-    let fats: Double
+    let calories: String
+    let protein: String
+    let carbs: String
+    let fats: String
     
-    init(name: String, calories: Int, protein: Double, carbs: Double, fats: Double) {
+    init(name: String, calories: String,
+         protein: String, carbs: String, fats: String) {
+        
         self.name = name
         self.calories = calories
         self.protein = protein
@@ -47,8 +50,8 @@ class Meal: LoggableItem {
 
 // Factory Class
 class LoggableItemFactory {
-    static func createItem(type: String, name: String, sets: Int = 0, reps: Int = 0, duration: Int = 0,
-                           calories: Int = 0, protein: Double = 0.0, carbs: Double = 0.0, fats: Double = 0.0) -> LoggableItem {
+    static func createItem(type: String, name: String, sets: String = "", reps: String = "", duration: String = "",
+                           calories: String = "", protein: String = "", carbs: String = "", fats: String = "") -> LoggableItem {
         switch type {
         case "Strength":
             return StrengthWorkout(name: name, sets: sets, reps: reps)
