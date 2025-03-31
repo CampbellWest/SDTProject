@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var showMealForm = false
     @State private var showStatsView = false
     @State private var selectedTab = 0
+    @State private var showStopWatch = false
     
     // Color scheme
     let accentColor = Color("AccentColor", defaultValue: Color.green)
@@ -47,9 +48,20 @@ struct ContentView: View {
                     }
                     
                     Spacer()
+                    Button {
+                        showStopWatch = true
+                    } label: {
+                        AchievementBadge(icon: "stopwatch", title: "", color: .blue)
+
+                    }
+                    .padding(.top, 14)
+                    .padding(.horizontal, -5)
+                    .buttonStyle(PlainButtonStyle())
+
                 }
                 .padding(.horizontal)
-                .padding(.top, 10)
+                .padding(.top, -5)
+                .padding(.bottom, -5)
                 .background(backgroundColor)
                 
                 // Main content based on selected tab
@@ -83,12 +95,17 @@ struct ContentView: View {
                     Text("No item selected")
                 }
             }
+            .sheet(isPresented: $showStopWatch) {
+                StopwatchView() 
+            }
         }
         .frame(width: windowWidth, height: windowHeight)
         .onAppear {
+            LoggableItemStorage.shared.loadItems()
             updateLoggedItems() // Load existing data on app start
         }
     }
+    
     
     // Dashboard view
     var dashboardView: some View {
@@ -280,6 +297,7 @@ struct SectionHeader: View {
                     .foregroundColor(.accentColor)
                     .font(.system(size: 20))
             }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(.horizontal)
         .padding(.top, 10)
